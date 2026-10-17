@@ -6,6 +6,7 @@ export type FillLevel = (typeof FILL_LEVELS)[number];
 
 export type RecyclingBin = {
   id: string;
+  stationId?: string;
   type: BinType;
   fill: FillLevel;
   road: string;
@@ -47,6 +48,7 @@ export function normalizeBins(value: unknown): RecyclingBin[] {
 
     return [{
       id: bin.id,
+      ...(typeof bin.stationId === "string" ? { stationId: bin.stationId } : {}),
       type: bin.type,
       fill: bin.fill,
       road: bin.road,

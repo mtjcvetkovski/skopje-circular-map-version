@@ -24,12 +24,13 @@ The map uses OpenStreetMap tiles and displays contributor attribution. Use a til
 
 ## Smart-bin map data
 
-The `/map` page reads the bin list from `public/bins.json`. Add one object per bin using this shape:
+The `/map` page reads the bin list from `public/bins.json`. The supplied dataset currently contains 962 bin records across 400 station IDs. Add one object per bin using this shape:
 
 ```json
 [
   {
     "id": "unique-bin-id",
+    "stationId": "station-0",
     "type": "paper",
     "fill": "half",
     "road": "Example Street",
@@ -40,7 +41,7 @@ The `/map` page reads the bin list from `public/bins.json`. Add one object per b
 ]
 ```
 
-Supported types are `paper`, `plastic` and `glass`; fullness values are `empty`, `half` and `full`. Coordinates must be in the Skopje area. The browser map can report a new fill level, but those reports are stored only in that browser's local storage and do not update `bins.json`, a shared database, or a sensor. Connect a server endpoint before treating resident reports as shared operational data. Walking routes request a route from the public OSM-Germany foot-routing service; its availability and request limits are outside this project's control.
+Supported types are `paper`, `plastic` and `glass`; fullness values are `empty`, `half` and `full`. Coordinates must be in the Skopje area. Bins sharing a `stationId` are spaced slightly on the map so their markers can be tapped separately; route calculations still use the supplied coordinates. This JSON is a static snapshot. The browser map can report a new fill level, but those reports are stored only in that browser's local storage and do not update `bins.json`, a shared database, or a sensor. Connect a server endpoint before treating resident reports as shared operational data. Walking routes request a route from the public OSM-Germany foot-routing service; its availability and request limits are outside this project's control.
 
 ## Supabase privacy and retention
 

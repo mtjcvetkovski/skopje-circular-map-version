@@ -231,6 +231,8 @@ body{font-size:16px;line-height:1.6}
 .bin-map-legend span>i{display:inline-block;width:11px;height:11px;border-radius:50%;flex:0 0 11px}
 .bin-map-legend .bin-legend-ring{background:#fffefa;border:3px solid}
 .bin-card h2{margin-bottom:4px}
+.bin-card .location-type{display:flex;align-items:center;gap:6px}
+.location-type .bin-station-id{color:#92998f;font:9px "DM Mono",monospace;white-space:nowrap}
 .bin-updated{margin:0 0 13px;color:#7b8579;font:10px/1.5 "DM Mono",monospace}
 .bin-card-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid #edf0e8;padding-top:11px}
 .bin-fill-label{display:flex;align-items:center;gap:7px;color:#586658;font-size:11px}
@@ -238,6 +240,7 @@ body{font-size:16px;line-height:1.6}
 .bin-map-link:hover{background:#e9eee4;border-color:#a7b5a0}
 .bin-popup{min-width:220px;color:var(--ink)}
 .bin-popup>strong{font:700 14px Manrope,sans-serif;color:var(--forest)}
+.bin-popup-station{display:block;margin-top:3px;color:#879184;font:10px "DM Mono",monospace}
 .bin-popup-road{margin:3px 0 8px;color:#657166;font-size:12px}
 .bin-popup-state{display:flex;align-items:center;gap:7px;margin:0 0 9px;color:#647064;font-size:11px}
 .bin-popup-question{display:block;margin-bottom:6px;font-weight:700;font-size:11px}

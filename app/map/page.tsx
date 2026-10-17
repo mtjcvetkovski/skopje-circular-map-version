@@ -107,7 +107,7 @@ function BinCard({ bin, language, typeLabel, fillLabel, onShow }: {
   const relative = Number.isFinite(updated) ? formatTimeAgo(updated, language) : null;
 
   return <article className="location-card bin-card">
-    <div className="location-card-top"><span className="location-type"><i className="bin-type-dot" style={{ background: TYPE_COLORS[bin.type] }} />{typeLabel[bin.type]}</span>
+    <div className="location-card-top"><span className="location-type"><i className="bin-type-dot" style={{ background: TYPE_COLORS[bin.type] }} />{typeLabel[bin.type]}{bin.stationId && <small className="bin-station-id">· {bin.stationId}</small>}</span>
       <span className="freshness" style={{ color: FILL_COLORS[bin.fill] }}>● {fillLabel[bin.fill]}</span></div>
     <h2>{bin.road}</h2>
     <p className="bin-updated">{t("binUpdated")}: {relative ?? checked}{relative ? ` · ${checked}` : ""}</p>
