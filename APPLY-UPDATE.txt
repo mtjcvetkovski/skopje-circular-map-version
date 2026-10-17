@@ -1,13 +1,13 @@
 Skopje Circular smart-bin map update
 
-Apply at the root of the existing skopje-circular repository by extracting this archive and copying its folders over the repository folders. The package includes the updated /map page, map component, bilingual labels, styling, JSON data loader, and README notes.
+This archive contains the updated /map page, map component, bilingual labels, styling, JSON data loader, README notes, and the provided 962-bin dataset in public/bins.json.
 
-Before deploying, replace public/bins.json with the actual bin JSON. The file in this package is an empty placeholder because the bin dataset was not included with the supplied HTML. Expected rows use: id, type (paper|plastic|glass), fill (empty|half|full), road, lat, lon, updatedAt.
+Apply it at the root of the existing skopje-circular repository by extracting this archive and copying/overwriting its folders and files in the repository. The supplied bins.js and bins.json contain the same 962 records; this Next.js page reads public/bins.json directly, so it does not need a separate bins.js script.
 
-Then run from the repository root:
+From the repository root, install dependencies if needed and preview with:
   npm install
   npm run dev
 
-If it looks right, commit and push the changed files to the GitHub repository connected to Vercel. Vercel will build the update from that push. These changes were not pushed to GitHub.
+If it looks right, commit and push the changed files to the GitHub repository connected to Vercel. Vercel will build the update from that push. You can also deploy the linked local repo with the Vercel CLI. These changes have not been pushed or deployed from this task.
 
 Fullness reports in this version stay in the reporting browser's local storage. Shared reports need a server API or database integration.

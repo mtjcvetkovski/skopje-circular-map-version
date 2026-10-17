@@ -26,6 +26,7 @@ export default function RecyclingMap({ bins, language, onReport, selectedBinId }
   const [locating, setLocating] = useState(false);
   const typeLabel = useMemo<Record<BinType, string>>(() => ({ paper: t("paper"), plastic: t("plastic"), glass: t("glass") }), [t]);
   const fillLabel = useMemo<Record<FillLevel, string>>(() => ({ empty: t("binEmpty"), half: t("binHalf"), full: t("binFull") }), [t]);
+  const markerPositions = useMemo(() => spreadStationMarkers(bins), [bins]);
 
   function locate() {
     if (!navigator.geolocation) {
@@ -111,7 +112,7 @@ export default function RecyclingMap({ bins, language, onReport, selectedBinId }
       <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>' url={tileUrl} />
       {bins.map((bin) => <CircleMarker
         key={bin.id}
-        center={[bin.lat, bin.lon]}
+        center={markerPositions.get(bin.id) ?? [bin.lat, bin.lon]}
         radius={selectedBinId === bin.id ? 11 : 8}
         pathOptions={{ color: FILL_COLORS[bin.fill], weight: 3, fillColor: TYPE_COLORS[bin.type], fillOpacity: 0.95 }}
       >
@@ -155,6 +156,7 @@ function BinPopup({ bin, language, typeLabel, fillLabel, onReport }: {
   const { t } = useLanguage();
   return <div className="bin-popup">
     <strong>{typeLabel}</strong>
+    {bin.stationId && <span className="bin-popup-station">{language === "mk" ? "Пункт" : "Station"} {bin.stationId}</span>}
     <p className="bin-popup-road">{bin.road}</p>
     <p className="bin-popup-state"><i style={{ background: FILL_COLORS[bin.fill] }} />{fillLabel[bin.fill]} · {t("binUpdated")} {formatTimeAgo(Date.parse(bin.updatedAt), language)}</p>
     <span className="bin-popup-question">{t("binReportQuestion")}</span>
@@ -200,6 +202,33 @@ function MapViewport({ bins, selectedBinId, routeBounds }: {
     }
   }, [bins, map, routeBounds, selectedBinId]);
   return null;
+}
+
+function spreadStationMarkers(bins: RecyclingBin[]) {
+  const groups = new Map<string, RecyclingBin[]>();
+  for (const bin of bins) {
+    const key = bin.stationId ?? bin.id;
+    groups.set(key, [...(groups.get(key) ?? []), bin]);
+  }
+
+  const positions = new Map<string, Position>();
+  for (const group of groups.values()) {
+    if (group.length === 1) {
+      positions.set(group[0].id, [group[0].lat, group[0].lon]);
+      continue;
+    }
+
+    const centerLat = group.reduce((total, bin) => total + bin.lat, 0) / group.length;
+    const centerLon = group.reduce((total, bin) => total + bin.lon, 0) / group.length;
+    const radiusMeters = 18;
+    group.forEach((bin, index) => {
+      const angle = -Math.PI / 2 + (2 * Math.PI * index) / group.length;
+      const lat = centerLat + Math.sin(angle) * radiusMeters / 111_320;
+      const lon = centerLon + Math.cos(angle) * radiusMeters / (111_320 * Math.cos(centerLat * Math.PI / 180));
+      positions.set(bin.id, [lat, lon]);
+    });
+  }
+  return positions;
 }
 
 function distanceMeters([lat1, lon1]: Position, [lat2, lon2]: Position) {
