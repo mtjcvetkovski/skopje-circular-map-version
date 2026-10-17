@@ -22,6 +22,26 @@ Requirements: Node.js 20.9 or newer and a Supabase project.
 
 The map uses OpenStreetMap tiles and displays contributor attribution. Use a tile endpoint that permits your traffic, follow its caching rules, and update `NEXT_PUBLIC_MAP_TILE_URL` and the attribution component if changing providers. The public OSM standard tile endpoint is not a production CDN.
 
+## Smart-bin map data
+
+The `/map` page reads the bin list from `public/bins.json`. Add one object per bin using this shape:
+
+```json
+[
+  {
+    "id": "unique-bin-id",
+    "type": "paper",
+    "fill": "half",
+    "road": "Example Street",
+    "lat": 41.9981,
+    "lon": 21.4254,
+    "updatedAt": "2026-10-17T10:00:00Z"
+  }
+]
+```
+
+Supported types are `paper`, `plastic` and `glass`; fullness values are `empty`, `half` and `full`. Coordinates must be in the Skopje area. The browser map can report a new fill level, but those reports are stored only in that browser's local storage and do not update `bins.json`, a shared database, or a sensor. Connect a server endpoint before treating resident reports as shared operational data. Walking routes request a route from the public OSM-Germany foot-routing service; its availability and request limits are outside this project's control.
+
 ## Supabase privacy and retention
 
 - Anonymous residents can insert consented interest records but have no `SELECT` policy or grant.
